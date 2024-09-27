@@ -1,1 +1,4 @@
-# SOEN-342
+# SOEN-342 Sections H and II: Software Requirements and Deployment Fall 2024
+
+  - Rory Poonyth | 40226938 | rory.poonyth@gmail.com | Section H
+  - Desire Ouattara | 40136181 | | Section II

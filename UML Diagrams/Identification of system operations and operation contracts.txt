@@ -1,0 +1,41 @@
+Operation: Process Offering
+
+Cross Refs: User Profile Management, Service Selection Module.
+Preconditions:
+	The user must be authenticated and have the required privileges to offer a process.
+        The process to be offered must be well-defined with all required details.
+        The system must validate the input data for correctness and completeness.
+Postconditions:
+        The new process is successfully added to the list of available services.
+        The system updates the offering list accessible to other users.
+        Confirmation is sent to the provider that the process is active and available for selection.
+
+
+Operation: Instructor Select Lessons
+
+Cross Refs: Lesson Database, Course Management Module, User Authorization.
+Preconditions:
+        The instructor must be logged in and have the necessary permissions to select or modify lessons.
+        Lessons must already exist in the system for selection.
+        The course must be created and linked to the instructor.
+        The system must validate that the instructor is associated with the course for which the lessons are being selected.
+Postconditions:
+        The selected lessons are linked to the course being managed by the instructor.
+        The lesson selection is stored in the system database.
+        A confirmation message is provided to the instructor.
+        A record is updated, reflecting the lessons selected for the course.
+
+
+Operation: Public Can View Offerings
+
+Cross Refs: Offering Database, Public Access Module, (Filtering/Search Functions).
+Preconditions:
+        The system must have publicly accessible offerings stored in the database.
+        The user does not need to be logged in or have any special permissions to view offerings.
+        Offerings must be marked as publicly viewable by the service providers.
+        The system must be operational, and the database must be accessible.
+Postconditions:
+        The user can view a list of available offerings without needing to authenticate.
+        The system displays the offerings along with any applied filters or search criteria.
+        No sensitive information is displayed to the user.
+        The page or module containing the offerings is fully rendered for the user, and they can proceed with viewing details or performing further actions.

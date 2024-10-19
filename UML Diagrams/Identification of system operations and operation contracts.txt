@@ -1,41 +1,261 @@
-Operation: Process Offering
+Contract 1: Register Admin
 
-Cross Refs: User Profile Management, Service Selection Module.
-Preconditions:
-	The user must be authenticated and have the required privileges to offer a process.
-        The process to be offered must be well-defined with all required details.
-        The system must validate the input data for correctness and completeness.
-Postconditions:
-        The new process is successfully added to the list of available services.
-        The system updates the offering list accessible to other users.
-        Confirmation is sent to the provider that the process is active and available for selection.
+Operation: register_admin(name: String, password: String)
 
+Cross References: Use Case - Login/Register/Logout
 
-Operation: Instructor Select Lessons
+Pre-conditions:
 
-Cross Refs: Lesson Database, Course Management Module, User Authorization.
-Preconditions:
-        The instructor must be logged in and have the necessary permissions to select or modify lessons.
-        Lessons must already exist in the system for selection.
-        The course must be created and linked to the instructor.
-        The system must validate that the instructor is associated with the course for which the lessons are being selected.
-Postconditions:
-        The selected lessons are linked to the course being managed by the instructor.
-        The lesson selection is stored in the system database.
-        A confirmation message is provided to the instructor.
-        A record is updated, reflecting the lessons selected for the course.
+    An active database session exists.
+    The User, Client, Instructor, and Admin tables are present in the database.
+    name is a non-empty string.
+    password is a non-empty string.
+    No other Admin instance exists in the system (only one administrator is allowed).
 
+Post-conditions:
 
-Operation: Public Can View Offerings
+    An Admin instance is created.
+    The new admin is added to both the User and Admin database tables.
+    The system recognizes the new admin as the sole administrator.
 
-Cross Refs: Offering Database, Public Access Module, (Filtering/Search Functions).
-Preconditions:
-        The system must have publicly accessible offerings stored in the database.
-        The user does not need to be logged in or have any special permissions to view offerings.
-        Offerings must be marked as publicly viewable by the service providers.
-        The system must be operational, and the database must be accessible.
-Postconditions:
-        The user can view a list of available offerings without needing to authenticate.
-        The system displays the offerings along with any applied filters or search criteria.
-        No sensitive information is displayed to the user.
-        The page or module containing the offerings is fully rendered for the user, and they can proceed with viewing details or performing further actions.
+Contract 2: Register Client
+
+Operation: register_client(name: String, password: String)
+
+Cross References: Use Case - Login/Register/Logout
+
+Pre-conditions:
+
+    An active database session exists.
+    The User, Client, Instructor, and Admin tables are present in the database.
+    name is a non-empty string.
+    password is a non-empty string.
+
+Post-conditions:
+
+    A Client instance is created.
+    The new client is added to both the User and Client database tables.
+    The client can now log in and access client-specific functionalities.
+
+Contract 3: Register Instructor
+
+Operation: register_instructor(name: String, password: String, phone_number: String, specialization: List[SpecializationType], available_cities: List[String])
+
+Cross References: Use Case - Login/Register/Logout
+
+Pre-conditions:
+
+    An active database session exists.
+    The User, Client, Instructor, and Admin tables are present in the database.
+    name is a non-empty string.
+    password is a non-empty string.
+    phone_number is a non-empty string of exactly 10 digits.
+    specialization is a non-empty list containing valid SpecializationType values.
+    available_cities is a non-empty list of valid city names.
+
+Post-conditions:
+
+    An Instructor instance is created.
+    The new instructor is added to both the User and Instructor database tables.
+    The instructor's specializations and available cities are recorded in the system.
+
+Contract 4: Login
+
+Operation: login(name: String, password: String, phone_number: String = None)
+
+Cross References: Use Case - Login/Register/Logout
+
+Pre-conditions:
+
+    An active database session exists.
+    The User, Client, Instructor, and Admin tables are present in the database.
+    name is a non-empty string.
+    password is a non-empty string.
+    If logging in as an Instructor, phone_number is a non-empty string consisting of exactly 10 digits.
+
+Post-conditions:
+
+    If the user is a Client, a Client object is returned.
+    If the user is an Instructor, an Instructor object is returned.
+    If the user is an Admin, an Admin object is returned.
+    The user is authenticated and presented with their respective menu options based on their user type.
+
+Administrative Operations
+Contract 5: Create Offering
+
+Operation: create_offering(location: Location, capacity: int, timeslot: Timeslot, offering_type: OfferingType, specialization: SpecializationType)
+
+Cross References: Use Case - Create Offering
+
+Pre-conditions:
+
+    An active database session exists.
+    location is a valid and existing Location instance.
+    capacity is an integer greater than zero and does not exceed location's capacity.
+    timeslot is a valid Timeslot instance.
+    timeslot does not conflict with existing timeslots in location's schedule.
+    offering_type is a valid OfferingType.
+    specialization is a valid SpecializationType.
+
+Post-conditions:
+
+    An Offering instance is created and saved to the database.
+    The offering is associated with the specified location and timeslot.
+    The offering's type and specialization are set accordingly.
+    The timeslot is added to the location's schedule to prevent conflicts.
+    The offering is available for instructors to be assigned and clients to book.
+
+Contract 6: Delete Instructor or Client
+
+Operation: delete_user(name: String = None, id: int = None)
+
+Cross References: Use Case - Delete Instructor/Client Account
+
+Pre-conditions:
+
+    An active database session exists.
+    The User, Client, Instructor, and Admin tables are present in the database.
+    Either name or id is provided and valid.
+    The user to be deleted is an existing Client or Instructor.
+    The user exists in the system.
+
+Post-conditions:
+
+    The Client or Instructor instance is removed from the system and database.
+    All associations between the user and Booking or Offering are severed.
+    For instructors:
+        Associated offerings are canceled.
+        All bookings linked to those offerings are canceled.
+    For clients:
+        All bookings made by the client are canceled and removed.
+    Changes are committed to the database.
+
+Instructor Operations
+Contract 7: Get Available Offerings for Instructor
+
+Operation: get_available_offerings_for_instructor(cities: List[String], specializations: List[SpecializationType])
+
+Cross References: Use Case - Instructor Viewing Available Offerings
+
+Pre-conditions:
+
+    An active database session exists.
+    cities is a non-empty list of valid city names.
+    specializations is a non-empty list of valid SpecializationType values.
+    The Offering table contains offerings matching the criteria.
+    Offerings have no instructor assigned (offering.instructor_id is None).
+
+Post-conditions:
+
+    Returns a list of Offering instances that:
+        Are located in one of the specified cities.
+        Match one of the specified specializations.
+        Are not assigned to any instructor.
+    The list can be used by instructors to select offerings to teach.
+
+Contract 8: Assign Instructor to Offering
+
+Operation: assign_instructor_to_offering(instructor: Instructor, offering: Offering)
+
+Cross References: Use Case - Assign Instructor to Teach Offering
+
+Pre-conditions:
+
+    An active database session exists.
+    instructor is a valid Instructor instance.
+    offering is a valid Offering instance.
+    offering has no instructor assigned (offering.instructor_id is None).
+    The instructor is available during the offering's timeslot (no scheduling conflicts).
+
+Post-conditions:
+
+    offering.instructor_id is set to instructor.id.
+    The offering is added to instructor.offerings.
+    The instructor is now responsible for the offering.
+    Changes are committed to the database.
+    If an error occurs, the transaction is rolled back, and no changes are made.
+
+Contract 9: Remove Instructor from Offering
+
+Operation: remove_instructor_from_offering(instructor: Instructor, offering: Offering)
+
+Cross References: Use Case - Remove Instructor from Teaching Offering
+
+Pre-conditions:
+
+    An active database session exists.
+    instructor is a valid Instructor instance.
+    offering is a valid Offering instance.
+    offering.instructor_id equals instructor.id.
+
+Post-conditions:
+
+    offering.instructor_id is set to None.
+    The offering is removed from instructor.offerings.
+    All bookings associated with the offering are canceled and deleted.
+    Clients are notified of the cancellation (if notification system exists).
+    Changes are committed to the database.
+    If an error occurs, the transaction is rolled back, and no changes are made.
+
+Client Operations
+Contract 10: Create Booking for Client
+
+Operation: create_booking(client: Client, offering: Offering, minor_id: int = None)
+
+Cross References: Use Case - Booking Creation
+
+Pre-conditions:
+
+    An active database session exists.
+    client is a valid Client instance.
+    offering is a valid Offering instance.
+    offering has available capacity.
+    If minor_id is provided, it corresponds to a Minor associated with the client.
+    The client or minor is not already booked for the offering's timeslot.
+
+Post-conditions:
+
+    A Booking instance is created and linked to the client (and Minor, if applicable) and offering.
+    offering.current_capacity is incremented.
+    The booking is saved to the database.
+    The client (and minor, if applicable) is now scheduled to attend the offering.
+    If an error occurs, the transaction is rolled back, and no booking is created.
+
+Contract 11: Get Client Bookings
+
+Operation: get_client_bookings(client: Client)
+
+Cross References: Use Case - View Bookings
+
+Pre-conditions:
+
+    An active database session exists.
+    client is a valid Client instance.
+
+Post-conditions:
+
+    Returns a list of all active Booking instances associated with the client.
+    The list includes bookings for both the client and any associated minors.
+    The client can view details of upcoming and past offerings they are booked for.
+
+Contract CO12: Cancel Client Booking
+
+Operation: cancel_booking(client: Client, booking: Booking, minor_id: int = None)
+
+Cross References: Use Case - Cancel Booking
+
+Pre-conditions:
+
+    An active database session exists.
+    client is a valid Client instance.
+    booking is a valid Booking instance associated with the client.
+    If minor_id is provided, it corresponds to a Minor associated with the client and linked to the booking.
+
+Post-conditions:
+
+    The Booking instance is removed from the database or marked as canceled.
+    offering.current_capacity is decremented.
+    If the offering has a waitlist, the next client is promoted.
+    The client (and minor, if applicable) is no longer scheduled for the offering.
+    Changes are committed to the database.
+    If an error occurs, the transaction is rolled back, and the booking remains active.

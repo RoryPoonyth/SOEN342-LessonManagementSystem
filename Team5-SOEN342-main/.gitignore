@@ -1,0 +1,17 @@
+Team5/target/*
+Team5/pom.xml.tag
+Team5/pom.xml.releaseBackup
+Team5/pom.xml.versionsBackup
+Team5/pom.xml.next
+Team5/release.properties
+Team5/dependency-reduced-pom.xml
+Team5/buildNumber.properties
+Team5/.mvn/timing.properties
+# https://github.com/takari/maven-wrapper#usage-without-binary-jar
+Team5/.mvn/wrapper/maven-wrapper.jar
+
+# Eclipse m2e generated files
+# Eclipse Core
+Team5/.project
+# JDT-specific (Eclipse Java Development Tools)
+Team5/.classpath

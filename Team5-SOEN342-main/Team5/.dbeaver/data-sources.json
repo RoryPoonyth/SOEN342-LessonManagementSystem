@@ -1,20 +1,6 @@
 {
 	"folders": {},
 	"connections": {
-		"sqlite_jdbc-19304c8448d-5c138c76f9b0db00": {
-			"provider": "sqlite",
-			"driver": "sqlite_jdbc",
-			"name": "Team5.db",
-			"save-password": true,
-			"configuration": {
-				"database": "C:\\Users\\Rory\\CODESPACE\\SOEN 342 Project\\Team5-SOEN342-main\\Team5.db",
-				"url": "jdbc:sqlite:C:\\Users\\Rory\\CODESPACE\\SOEN 342 Project\\Team5-SOEN342-main\\Team5.db",
-				"configurationType": "MANUAL",
-				"type": "dev",
-				"closeIdleConnection": true,
-				"auth-model": "native"
-			}
-		},
 		"sqlite_jdbc-19305420bfc-35a7bf4536bea516": {
 			"provider": "sqlite",
 			"driver": "sqlite_jdbc",

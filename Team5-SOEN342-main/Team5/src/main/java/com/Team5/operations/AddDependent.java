@@ -8,11 +8,11 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
-public class AddGuardian implements Operation {
+public class AddDependent implements Operation {
     private final Client client;
     private final Scanner scanner;
 
-    public AddGuardian(Client client, Scanner scanner) {
+    public AddDependent(Client client, Scanner scanner) {
         this.client = client;
         this.scanner = scanner;
     }

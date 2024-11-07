@@ -1,1 +1,1 @@
-{"resources":{"src/main/resources/db_setup.sql":{"default-datasource":"sqlite_jdbc-19304c8448d-5c138c76f9b0db00"}}}
+{"resources":{"src/main/resources/data_load.sql":{"default-datasource":"sqlite_jdbc-19305420bfc-35a7bf4536bea516"}}}

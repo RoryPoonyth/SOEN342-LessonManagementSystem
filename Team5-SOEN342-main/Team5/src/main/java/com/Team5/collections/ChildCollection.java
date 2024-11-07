@@ -14,6 +14,8 @@ public class ChildCollection {
     private static final String SELECT_CHILDREN_BY_CLIENT_ID_SQL = "SELECT * FROM child WHERE parentId = ?";
     private static final String VALIDATE_CHILD_SQL = "SELECT * FROM child WHERE parentId = ? AND firstName = ? AND lastName = ? AND dateOfBirth = ?";
     private static final String SELECT_ALL_CHILDREN_SQL = "SELECT * FROM child";
+    private static final String DELETE_CHILD_SQL = "DELETE FROM child WHERE id = ?";
+    
 
     public static List<Child> getChildren() {
         return executeQuery(SELECT_ALL_CHILDREN_SQL, statement -> {}, ChildCollection::extractChildList);
@@ -52,6 +54,12 @@ public class ChildCollection {
 
     public static List<Child> getChildrenByClientId(Integer clientId) {
         return executeQuery(SELECT_CHILDREN_BY_CLIENT_ID_SQL, statement -> statement.setInt(1, clientId), ChildCollection::extractChildList);
+    }
+    
+    public static boolean deleteChild(int childId) {
+        return executeUpdate(DELETE_CHILD_SQL, statement -> {
+            statement.setInt(1, childId);
+        }, null) > 0;
     }
 
     private static List<Child> extractChildList(ResultSet resultSet) throws SQLException {

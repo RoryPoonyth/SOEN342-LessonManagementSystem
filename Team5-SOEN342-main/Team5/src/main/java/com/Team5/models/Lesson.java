@@ -27,6 +27,7 @@ public class Lesson {
         this.endTime = endTime;
         this.schedule = schedule;
         this.isAvailable = false;
+        this.assignedInstructorId = -1;
     }
 
     public Integer getId() {
@@ -67,10 +68,14 @@ public class Lesson {
 
     public void setAssignedInstructorId(Integer assignedInstructorId) {
         this.assignedInstructorId = assignedInstructorId;
-        if (assignedInstructorId != -1) {
+
+        if (assignedInstructorId == -1) {
+            this.isAvailable = false;
+        } else {
             this.isAvailable = true;
         }
     }
+
 
     public Boolean getIsAvailable() {
         return isAvailable;

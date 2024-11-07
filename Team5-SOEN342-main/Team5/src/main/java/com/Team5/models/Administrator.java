@@ -6,7 +6,7 @@ public class Administrator {
     private String email;
     private String password;
 
-    private static final Administrator INSTANCE = new Administrator("Admin", "GOD", "admin@gmail.com", "password123");
+    private static final Administrator INSTANCE = new Administrator("Admin", "Admin", "admin@gmail.com", "password123");
 
     private Administrator(String firstName, String lastName, String email, String password) {
         this.firstName = firstName;

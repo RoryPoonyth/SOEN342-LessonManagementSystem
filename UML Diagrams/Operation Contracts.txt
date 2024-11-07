@@ -1,0 +1,749 @@
+Operation Contracts
+
+Contract 1: Enter Accept Offering Command ID
+
+    Operation: enterAcceptOfferingCommandId()
+    Cross References: Use Case - Accept Offering
+    Pre-conditions:
+        The instructor is logged into the system.
+        The list of possible commands is displayed to the instructor.
+        The request to enter the command ID is displayed.
+    Post-conditions:
+        The system retrieves all available locations.
+        The list of locations is displayed to the instructor, and they are prompted to enter a location ID.
+
+Contract 2: Enter Location ID
+
+    Operation: enterLocationId(locationId: Integer)
+    Cross References: Use Case - Accept Offering
+    Pre-conditions:
+        The list of available locations has been displayed to the instructor.
+        The system prompts the instructor to select a location by entering its ID.
+    Post-conditions:
+        The selected location ID is stored.
+        The system retrieves all unassigned lessons for the selected location.
+        The system displays the list of unassigned lessons to the instructor.
+
+Contract 3: Enter Lesson ID
+
+    Operation: enterLessonId(lessonId: Integer)
+    Cross References: Use Case - Accept Offering
+    Pre-conditions:
+        The list of unassigned lessons for the selected location has been displayed.
+        The system prompts the instructor to select a lesson by entering its ID.
+    Post-conditions:
+        If the lesson is available (i.e., not already assigned to an instructor), the lesson is assigned to the current instructor.
+        The system updates the lesson status to reflect that it has been assigned to the instructor.
+        A success message is displayed to indicate that the lesson has been successfully assigned.
+
+Contract 4: Enter Add Dependent Command ID
+
+    Operation: enterAddDependentCommandId()
+    Cross References: Use Case - Add Dependent
+    Pre-conditions:
+        The client is logged into the system.
+        The list of possible commands is displayed to the client.
+        The request to enter the command ID is displayed.
+    Post-conditions:
+        The system prompts the client to enter the dependent's first name.
+
+Contract 5: Enter First Name for Dependent
+
+    Operation: enterFirstName(firstName: String)
+    Cross References: Use Case - Add Dependent
+    Pre-conditions:
+        The add dependent command ID has been entered.
+        The system prompts the client to enter the dependent's first name.
+    Post-conditions:
+        The first name is validated to contain only alphabetic characters.
+        If the input is valid, the first name is stored.
+        The system prompts the client to enter the dependent's last name.
+
+Contract 6: Enter Last Name for Dependent
+
+    Operation: enterLastName(lastName: String)
+    Cross References: Use Case - Add Dependent
+    Pre-conditions:
+        The dependent's first name has been entered and validated.
+        The system prompts the client to enter the dependent's last name.
+    Post-conditions:
+        The last name is validated to contain only alphabetic characters.
+        If the input is valid, the last name is stored.
+        The system prompts the client to enter the dependent's date of birth.
+
+Contract 7: Enter Date of Birth for Dependent
+
+    Operation: enterDateOfBirth(dateOfBirth: LocalDate)
+    Cross References: Use Case - Add Dependent
+    Pre-conditions:
+        The dependent's first and last names have been entered and validated.
+        The system prompts the client to enter the dependent's date of birth.
+    Post-conditions:
+        The date of birth is validated to match one of the accepted formats (MMM dd, yyyy, dd-MM-yyyy, yyyy-MM-dd).
+        The date is further validated to ensure that it is not in the future and that the dependent is under 18 years old.
+        If the date is valid, the system checks if a dependent with the same details already exists.
+        If a matching dependent does not exist, a new dependent is created.
+        If creation is successful, a success message is displayed, and the dependent is associated with the client.
+        If creation fails or a dependent with the same details already exists, an appropriate error message is displayed.
+
+Contract 8: Enter View or Cancel Bookings Command ID
+
+    Operation: enterViewCancelBookingsCommandId()
+    Cross References: Use Case - Admin View or Cancel Bookings
+    Pre-conditions:
+        The administrator is logged into the system.
+        The list of possible commands is displayed to the administrator.
+        The request to enter the command ID is displayed.
+    Post-conditions:
+        The system retrieves all bookings.
+        If bookings are available, the list of bookings is displayed to the administrator, prompting them to enter a booking ID to view details or type -1 to exit.
+
+Contract 9: Enter Booking ID for Viewing Details
+
+    Operation: enterBookingId(bookingId: Integer)
+    Cross References: Use Case - Admin View or Cancel Bookings
+    Pre-conditions:
+        The list of all bookings has been displayed to the administrator.
+        The system has requested the administrator to enter a booking ID or type -1 to exit.
+    Post-conditions:
+        If the booking ID entered is valid, the system retrieves details for the selected booking.
+        If the booking ID is -1, the administrator exits the booking management process.
+        If the booking ID is invalid, an error message is displayed, and the system requests a valid booking ID.
+
+Contract 10: Display Lesson Details for Booking
+
+    Operation: displayLessonDetails(lessonId: Integer)
+    Cross References: Use Case - Admin View or Cancel Bookings
+    Pre-conditions:
+        A valid booking ID has been selected by the administrator.
+        The system has retrieved the corresponding booking information, including the lesson, location, instructor, and child details.
+    Post-conditions:
+        The lesson details, including information about the lesson, location, instructor, and child, are displayed to the administrator.
+        The system prompts the administrator to either delete the booking or go back.
+
+Contract 11: Enter Action to Delete Booking or Go Back
+
+    Operation: enterActionForBooking(action: String)
+    Cross References: Use Case - Admin View or Cancel Bookings
+    Pre-conditions:
+        The lesson details for the selected booking have been displayed to the administrator.
+        The system has prompted the administrator to type 'd' to delete the booking or 'b' to go back.
+    Post-conditions:
+        If the administrator types 'd', the system deletes the booking and displays a success or failure message.
+        If the administrator types 'b', the system returns to the list of all bookings.
+        If the input is invalid, the system prompts the administrator to enter a valid action.
+
+Contract 12: Enter Create Booking Command ID
+
+    Operation: enterCreateBookingCommandId()
+    Cross References: Use Case - Create Booking
+    Pre-conditions:
+        The client is logged into the system.
+        The list of possible commands is displayed to the client.
+        The request to enter the command ID is displayed.
+    Post-conditions:
+        The system retrieves all available locations.
+        The list of locations is displayed to the client, prompting them to enter a location ID.
+
+Contract 13: Enter Location ID for Booking
+
+    Operation: enterLocationId(locationId: Integer)
+    Cross References: Use Case - Create Booking
+    Pre-conditions:
+        The list of locations has been displayed to the client.
+        The system prompts the client to enter a location ID to view available lessons.
+    Post-conditions:
+        If the location ID is valid, the system retrieves and displays all available lessons for that location.
+        If the location ID is invalid, the client is prompted to enter a valid location ID.
+
+Contract 14: Select Lesson for Booking
+
+    Operation: selectLesson(lessonId: Integer)
+    Cross References: Use Case - Create Booking
+    Pre-conditions:
+        The list of available lessons for the selected location has been displayed to the client.
+        The system prompts the client to select a lesson by entering the lesson ID.
+    Post-conditions:
+        If the lesson ID is valid, the selected lesson ID is stored.
+        If no lessons are available for the selected location, the booking process is terminated.
+        If the lesson ID is invalid, the client is prompted to enter a valid lesson ID.
+
+Contract 15: Enter Dependent Details for Booking
+
+    Operation: enterDependentDetails(response: String, childId: Integer)
+    Cross References: Use Case - Create Booking
+    Pre-conditions:
+        A valid lesson ID has been selected.
+        The system has prompted the client to specify whether the booking is for an underage dependent.
+    Post-conditions:
+        If the client specifies the booking is for a dependent (yes), the system retrieves and displays the list of dependents associated with the client.
+        If the client chooses to proceed with the booking for a dependent, a valid child ID is requested and stored.
+        If the child ID is invalid, the client is prompted to enter a valid child ID.
+        If the client chooses not to book for a dependent (no), the system proceeds with creating the booking.
+
+Contract 16: Create Booking
+
+    Operation: createBooking(lessonId: Integer, childId: Integer)
+    Cross References: Use Case - Create Booking
+    Pre-conditions:
+        The client has selected a valid lesson ID.
+        If applicable, a valid child ID has been entered for the dependent.
+        The system has validated whether the booking can be created.
+    Post-conditions:
+        If the booking passes validation, the booking is created with the client's ID, selected lesson ID, and (if applicable) the child ID.
+        A success message is displayed to confirm the booking.
+        If the booking fails validation, an error message is displayed, and the booking process is terminated.
+
+Contract 17: Enter Create Lesson Command ID
+
+    Operation: enterCreateLessonCommandId()
+    Cross References: Use Case - Create Lesson
+    Pre-conditions:
+        The administrator is logged into the system.
+        The list of possible commands is displayed to the administrator.
+        The request to enter the command ID is displayed.
+    Post-conditions:
+        The system retrieves and displays all available locations to the administrator.
+        The system prompts the administrator to enter a location ID.
+
+Contract 18: Enter Location ID for Creating Lesson
+
+    Operation: enterLocationId(locationId: Integer)
+    Cross References: Use Case - Create Lesson
+    Pre-conditions:
+        The list of available locations has been displayed to the administrator.
+        The system prompts the administrator to enter a location ID to view corresponding lessons.
+    Post-conditions:
+        If the location ID is valid, the system stores the selected location ID.
+        If the location ID is invalid, the administrator is prompted to enter a valid location ID.
+        The system prompts the administrator to enter the lesson type.
+
+Contract 19: Enter Lesson Type
+
+    Operation: enterLessonType(lessonType: LessonType)
+    Cross References: Use Case - Create Lesson
+    Pre-conditions:
+        The location ID has been successfully entered.
+        The system prompts the administrator to enter the lesson type.
+    Post-conditions:
+        The lesson type is validated to be either 'PRIVATE' or 'GROUP'.
+        If the input is valid, the lesson type is stored.
+        The system prompts the administrator to enter a start time.
+
+Contract 20: Enter Start Time for Lesson
+
+    Operation: enterStartTime(startTime: String)
+    Cross References: Use Case - Create Lesson
+    Pre-conditions:
+        The lesson type has been successfully entered.
+        The system prompts the administrator to enter the start time.
+    Post-conditions:
+        The start time is validated to match the format HH:mm (military time).
+        If the input is valid, the start time is stored.
+        The system prompts the administrator to enter an end time.
+
+Contract 21: Enter End Time for Lesson
+
+    Operation: enterEndTime(endTime: String)
+    Cross References: Use Case - Create Lesson
+    Pre-conditions:
+        The start time has been successfully entered.
+        The system prompts the administrator to enter the end time.
+    Post-conditions:
+        The end time is validated to match the format HH:mm (military time).
+        If the end time is greater than the start time, the end time is stored.
+        If the end time is not greater than the start time, the administrator is prompted to enter valid start and end times again.
+        The system prompts the administrator to enter a lesson title.
+
+Contract 22: Enter Lesson Title
+
+    Operation: enterTitle(title: String)
+    Cross References: Use Case - Create Lesson
+    Pre-conditions:
+        The start and end times have been successfully entered.
+        The system prompts the administrator to enter the lesson title.
+    Post-conditions:
+        The title is validated to be non-empty and less than or equal to 100 characters.
+        If the input is valid, the title is stored.
+        The system prompts the administrator to enter the schedule.
+
+Contract 23: Enter Schedule for Lesson
+
+    Operation: enterSchedule(schedule: String)
+    Cross References: Use Case - Create Lesson
+    Pre-conditions:
+        The lesson title has been successfully entered.
+        The system prompts the administrator to enter the schedule in the format of valid days (M, Tu, W, Th, F, Sa, Su).
+    Post-conditions:
+        The schedule is validated to match the format of valid days.
+        If the input is valid, the schedule is stored.
+        The system prompts the administrator to confirm the lesson details.
+
+Contract 24: Enter Confirmation for Creating Lesson
+
+    Operation: enterConfirmation(confirmation: String)
+    Cross References: Use Case - Create Lesson
+    Pre-conditions:
+        The location ID, lesson type, start time, end time, title, and schedule have all been successfully entered.
+        The system prompts the administrator to confirm the details.
+    Post-conditions:
+        If the confirmation is 'yes', the system validates the lesson and attempts to create it.
+        If the lesson creation is successful, the system displays a success message.
+        If the lesson creation fails, an error message is displayed.
+        If the confirmation is 'no', the lesson creation process is aborted.
+
+Contract 25: Enter Delete User Command ID
+
+    Operation: enterDeleteUserCommandId()
+    Cross References: Use Case - Delete User Account
+    Pre-conditions:
+        The administrator is logged into the system.
+        The list of possible commands is displayed to the administrator.
+        The request to enter the command ID is displayed.
+    Post-conditions:
+        The system prompts the administrator to enter the user type (CLIENT or INSTRUCTOR) that they wish to delete.
+
+Contract 26: Enter User Type for Deletion
+
+    Operation: enterUserType(userType: UserType)
+    Cross References: Use Case - Delete User Account
+    Pre-conditions:
+        The delete user command ID has been entered.
+        The system has requested the administrator to enter the user type to delete.
+    Post-conditions:
+        The user type is validated to be either CLIENT or INSTRUCTOR.
+        If the input is valid, the system proceeds with retrieving the list of users of the specified type.
+        If the user type is invalid, the administrator is prompted to enter a valid user type.
+
+Contract 27: Display Users for Deletion
+
+    Operation: displayUsers(userType: UserType)
+    Cross References: Use Case - Delete User Account
+    Pre-conditions:
+        A valid user type (CLIENT or INSTRUCTOR) has been entered.
+        The system has successfully retrieved a list of users of the specified type.
+    Post-conditions:
+        The system displays the list of users (CLIENT or INSTRUCTOR) to the administrator.
+        The system prompts the administrator to enter the user ID of the user to delete.
+
+Contract 28: Enter User ID for Deletion
+
+    Operation: enterUserId(userId: Integer)
+    Cross References: Use Case - Delete User Account
+    Pre-conditions:
+        The list of users (CLIENT or INSTRUCTOR) has been displayed to the administrator.
+        The system prompts the administrator to enter a user ID.
+    Post-conditions:
+        If the user ID is valid and corresponds to a user in the list, the user ID is stored.
+        If the user ID is invalid, the administrator is prompted to enter a valid user ID.
+        The system prompts the administrator for confirmation before proceeding with the deletion.
+
+Contract 29: Confirm Deletion of User
+
+    Operation: confirmDeletion(confirmation: String)
+    Cross References: Use Case - Delete User Account
+    Pre-conditions:
+        A valid user ID has been entered.
+        The system has requested confirmation from the administrator before deleting the user.
+    Post-conditions:
+        If the administrator confirms the deletion (yes), the user account is deleted.
+        If the administrator does not confirm (no), the deletion process is aborted.
+        If the deletion is successful, a success message is displayed to the administrator.
+        If the deletion fails, an error message is displayed.
+
+Contract 30: Enter Manage Locations Command ID
+
+    Operation: enterManageLocationsCommandId()
+    Cross References: Use Case - Manage Locations
+    Pre-conditions:
+        The administrator is logged into the system.
+        The list of possible commands is displayed to the administrator.
+        The request to enter the command ID is displayed.
+    Post-conditions:
+        The system retrieves and displays all existing locations.
+        The system prompts the administrator to choose an action: add a location, remove a location, or exit.
+
+Contract 31: Select Location Management Action
+
+    Operation: selectLocationAction(action: String)
+    Cross References: Use Case - Manage Locations
+    Pre-conditions:
+        The list of locations has been displayed to the administrator.
+        The system prompts the administrator to enter a choice (add, remove, or exit).
+    Post-conditions:
+        If the choice is to add a location, the system proceeds to prompt for location details.
+        If the choice is to remove a location, the system proceeds to prompt for a location ID.
+        If the choice is to exit (-1), the location management process is terminated.
+        If the choice is invalid, an error message is displayed, and the administrator is prompted to make a valid choice.
+
+Contract 32: Add Location
+
+    Operation: addLocation(name: String, address: String, city: String, province: String, postalCode: String)
+    Cross References: Use Case - Manage Locations
+    Pre-conditions:
+        The administrator has chosen to add a location.
+        The system prompts the administrator to enter details for the new location (name, address, city, province, postal code).
+    Post-conditions:
+        The system validates the provided information.
+        If the location is successfully added, the system displays a success message.
+        If the location addition fails, an error message is displayed.
+
+Contract 33: Remove Location
+
+    Operation: removeLocation(locationId: Integer)
+    Cross References: Use Case - Manage Locations
+    Pre-conditions:
+        The administrator has chosen to remove a location.
+        The system prompts the administrator to enter the location ID to remove.
+    Post-conditions:
+        If the location ID is valid, the system removes the location and displays a success message.
+        If the location removal fails (e.g., due to an invalid ID), an error message is displayed, and the administrator is prompted to try again.
+        If the input is invalid (non-numeric), an error message is displayed.
+
+Contract 34: Enter Register Client Command ID
+
+    Operation: enterRegisterClientCommandId()
+    Cross References: Use Case - Register as Client
+    Pre-conditions:
+        The list of possible commands is displayed to the unlogged user.
+        The request to enter the command ID is displayed.
+    Post-conditions:
+        The system prompts the user to enter their first name.
+
+Contract 35: Enter First Name for Client Registration
+
+    Operation: enterFirstName(firstName: String)
+    Cross References: Use Case - Register as Client
+    Pre-conditions:
+        The client registration command ID has been entered.
+        The system prompts the user to enter their first name.
+    Post-conditions:
+        The first name is validated to contain only alphabetic characters.
+        If the input is valid, the first name is stored.
+        The system prompts the user to enter their last name.
+
+Contract 36: Enter Last Name for Client Registration
+
+    Operation: enterLastName(lastName: String)
+    Cross References: Use Case - Register as Client
+    Pre-conditions:
+        The client's first name has been entered and validated.
+        The system prompts the user to enter their last name.
+    Post-conditions:
+        The last name is validated to contain only alphabetic characters.
+        If the input is valid, the last name is stored.
+        The system prompts the user to enter their email.
+
+Contract 37: Enter Email for Client Registration
+
+    Operation: enterEmail(email: String)
+    Cross References: Use Case - Register as Client
+    Pre-conditions:
+        The client's last name has been entered and validated.
+        The system prompts the user to enter their email address.
+    Post-conditions:
+        The email address is validated to match the proper format.
+        If the input is valid, the email is stored.
+        The system prompts the user to enter their password.
+
+Contract 38: Enter Password for Client Registration
+
+    Operation: enterPassword(password: String)
+    Cross References: Use Case - Register as Client
+    Pre-conditions:
+        The client's email has been entered and validated.
+        The system prompts the user to enter a password.
+    Post-conditions:
+        The password is validated to be at least 6 characters long.
+        If the input is valid, the password is stored.
+        The system checks if an existing client already has the provided email.
+
+Contract 39: Validate Email for Existing Client
+
+    Operation: validateClientEmail(email: String)
+    Cross References: Use Case - Register as Client
+    Pre-conditions:
+        The email has been entered and validated.
+        The system checks if an existing client already has the provided email.
+    Post-conditions:
+        If a client with the provided email already exists, the registration process is terminated, and an error message is displayed.
+        If no existing client is found with the email, the system proceeds to create the client.
+
+Contract 40: Create Client Account
+
+    Operation: createClientAccount(firstName: String, lastName: String, email: String, password: String)
+    Cross References: Use Case - Register as Client
+    Pre-conditions:
+        The client's first name, last name, email, and password have all been entered and validated.
+        The system has verified that no existing client is registered with the provided email.
+    Post-conditions:
+        The client account is created and added to the client collection.
+        If the account creation is successful, a success message is displayed to the client.
+        If the account creation fails, an error message is displayed, and the registration process is terminated.
+
+Contract 41: Enter Register Instructor Command ID
+
+    Operation: enterRegisterInstructorCommandId()
+    Cross References: Use Case - Register as Instructor
+    Pre-conditions:
+        The list of possible commands is displayed to the unlogged user.
+        The request to enter the command ID is displayed.
+    Post-conditions:
+        The system prompts the user to enter their first name.
+
+Contract 42: Enter First Name for Instructor Registration
+
+    Operation: enterFirstName(firstName: String)
+    Cross References: Use Case - Register as Instructor
+    Pre-conditions:
+        The instructor registration command ID has been entered.
+        The system prompts the user to enter their first name.
+    Post-conditions:
+        The first name is validated to contain only alphabetic characters.
+        If the input is valid, the first name is stored.
+        The system prompts the user to enter their last name.
+
+Contract 43: Enter Last Name for Instructor Registration
+
+    Operation: enterLastName(lastName: String)
+    Cross References: Use Case - Register as Instructor
+    Pre-conditions:
+        The instructor's first name has been entered and validated.
+        The system prompts the user to enter their last name.
+    Post-conditions:
+        The last name is validated to contain only alphabetic characters.
+        If the input is valid, the last name is stored.
+        The system prompts the user to enter their email.
+
+Contract 44: Enter Email for Instructor Registration
+
+    Operation: enterEmail(email: String)
+    Cross References: Use Case - Register as Instructor
+    Pre-conditions:
+        The instructor's last name has been entered and validated.
+        The system prompts the user to enter their email address.
+    Post-conditions:
+        The email address is validated to match the proper format.
+        If the input is valid, the email is stored.
+        The system prompts the user to enter their password.
+
+Contract 45: Enter Password for Instructor Registration
+
+    Operation: enterPassword(password: String)
+    Cross References: Use Case - Register as Instructor
+    Pre-conditions:
+        The instructor's email has been entered and validated.
+        The system prompts the user to enter a password.
+    Post-conditions:
+        The password is validated to be at least 6 characters long.
+        If the input is valid, the password is stored.
+        The system checks if an existing instructor already has the provided email.
+
+Contract 46: Validate Email for Existing Instructor
+
+    Operation: validateInstructorEmail(email: String)
+    Cross References: Use Case - Register as Instructor
+    Pre-conditions:
+        The email has been entered and validated.
+        The system checks if an existing instructor already has the provided email.
+    Post-conditions:
+        If an instructor with the provided email already exists, the registration process is terminated, and an error message is displayed.
+        If no existing instructor is found with the email, the system proceeds to create the instructor.
+
+Contract 47: Create Instructor Account
+
+    Operation: createInstructorAccount(firstName: String, lastName: String, email: String, password: String)
+    Cross References: Use Case - Register as Instructor
+    Pre-conditions:
+        The instructor's first name, last name, email, and password have all been entered and validated.
+        The system has verified that no existing instructor is registered with the provided email.
+    Post-conditions:
+        The instructor account is created and added to the instructor collection.
+        If the account creation is successful, a success message is displayed to the instructor.
+        If the account creation fails, an error message is displayed, and the registration process is terminated.
+
+Contract 48: Enter Remove Dependent Command ID
+
+    Operation: enterRemoveDependentCommandId()
+    Cross References: Use Case - Remove Dependent
+    Pre-conditions:
+        The client is logged into the system.
+        The list of possible commands is displayed to the client.
+        The request to enter the command ID is displayed.
+    Post-conditions:
+        The system retrieves the list of dependents associated with the client.
+
+Contract 49: Display Dependents for Removal
+
+    Operation: displayDependents(dependents: List<Child>)
+    Cross References: Use Case - Remove Dependent
+    Pre-conditions:
+        The client has dependents associated with their account.
+        The system has retrieved the list of dependents.
+    Post-conditions:
+        The list of dependents is displayed to the client with numbered options.
+        The system prompts the client to select a dependent for removal or enter -1 to cancel.
+
+Contract 50: Enter Dependent Index for Removal
+
+    Operation: enterDependentIndex(index: Integer)
+    Cross References: Use Case - Remove Dependent
+    Pre-conditions:
+        The list of dependents has been displayed to the client.
+        The system has requested the client to enter the number corresponding to the dependent they wish to remove or enter -1 to cancel.
+    Post-conditions:
+        If the input is -1, the removal operation is cancelled, and a cancellation message is displayed.
+        If the input is valid, the corresponding dependent is selected for removal.
+        If the input is invalid, an error message is displayed, and the client is prompted to enter a valid number.
+
+Contract 51: Remove Dependent
+
+    Operation: removeDependent(dependentId: Integer)
+    Cross References: Use Case - Remove Dependent
+    Pre-conditions:
+        A valid dependent has been selected by the client for removal.
+    Post-conditions:
+        If the dependent is successfully removed, a success message is displayed.
+        If the removal operation fails, an error message is displayed.
+
+Contract 52: Enter View/Edit Bookings Command ID
+
+    Operation: enterViewEditBookingsCommandId()
+    Cross References: Use Case - View or Edit Bookings
+    Pre-conditions:
+        The client is logged into the system.
+        The list of possible commands is displayed to the client.
+        The request to enter the command ID is displayed.
+    Post-conditions:
+        The system retrieves all bookings associated with the client.
+        If there are no bookings, a message is displayed indicating that there are no bookings.
+        If bookings exist, they are displayed, and the client is prompted to enter a booking ID to view details or type -1 to exit.
+
+Contract 53: Enter Booking ID for Viewing Details
+
+    Operation: enterBookingId(bookingId: Integer)
+    Cross References: Use Case - View or Edit Bookings
+    Pre-conditions:
+        The list of bookings associated with the client has been displayed.
+        The system prompts the client to enter a booking ID to view details or type -1 to exit.
+    Post-conditions:
+        If the client enters -1, the process is terminated, and they exit the bookings section.
+        If a valid booking ID is entered, the system retrieves the booking details and displays them to the client.
+        If the booking ID is invalid, an error message is displayed, and the client is prompted to enter a valid booking ID.
+
+Contract 54: Display Lesson Details for Booking
+
+    Operation: displayLessonDetails(lessonId: Integer, locationId: Integer, instructorId: Integer, childId: Integer)
+    Cross References: Use Case - View or Edit Bookings
+    Pre-conditions:
+        A valid booking ID has been entered.
+        The system has retrieved the corresponding booking information, including the lesson, location, instructor, and child details.
+    Post-conditions:
+        The lesson details, including information about the lesson, location, instructor, and child, are displayed to the client.
+        The system prompts the client to either delete the booking or go back.
+
+Contract 55: Enter Action to Delete Booking or Go Back
+
+    Operation: enterActionForBooking(action: String)
+    Cross References: Use Case - View or Edit Bookings
+    Pre-conditions:
+        The lesson details for the selected booking have been displayed to the client.
+        The system has prompted the client to type 'd' to delete the booking or 'b' to go back.
+    Post-conditions:
+        If the client types 'd', the system deletes the booking and displays a success or failure message.
+        If the client types 'b', the system returns to the list of all bookings.
+        If the input is invalid, an error message is displayed, and the client is prompted to enter a valid action.
+
+Contract 56: Delete Booking
+
+    Operation: deleteBooking(bookingId: Integer)
+    Cross References: Use Case - View or Edit Bookings
+    Pre-conditions:
+        The client has chosen to delete a booking by typing 'd'.
+    Post-conditions:
+        If the booking is successfully deleted, a success message is displayed.
+        If the deletion fails, an error message is displayed.
+
+Contract 57: Enter View/Edit Offerings Command ID
+
+    Operation: enterViewEditOfferingsCommandId()
+    Cross References: Use Case - View or Edit Offerings
+    Pre-conditions:
+        The instructor is logged into the system.
+        The list of possible commands is displayed to the instructor.
+        The request to enter the command ID is displayed.
+    Post-conditions:
+        The system retrieves all lessons assigned to the instructor.
+        If there are no lessons assigned, a message is displayed indicating that there are no lessons.
+        If lessons exist, they are displayed, and the instructor is prompted to enter a lesson ID to view details or type -1 to exit.
+
+Contract 58: Enter Lesson ID for Viewing Details
+
+    Operation: enterLessonId(lessonId: Integer)
+    Cross References: Use Case - View or Edit Offerings
+    Pre-conditions:
+        The list of lessons assigned to the instructor has been displayed.
+        The system prompts the instructor to enter a lesson ID to view details or type -1 to exit.
+    Post-conditions:
+        If the instructor enters -1, the process is terminated, and they exit the offerings section.
+        If a valid lesson ID is entered, the system retrieves the lesson details and displays them to the instructor.
+        If the lesson ID is invalid, an error message is displayed, and the instructor is prompted to enter a valid lesson ID.
+
+Contract 59: Display Lesson Details for Offering
+
+    Operation: displayLessonDetails(lessonId: Integer, locationId: Integer, clientId: Integer)
+    Cross References: Use Case - View or Edit Offerings
+    Pre-conditions:
+        A valid lesson ID has been entered.
+        The system has retrieved the corresponding lesson information, including the location and client details.
+    Post-conditions:
+        The lesson details, including information about the lesson, location, and client, are displayed to the instructor.
+        The system prompts the instructor to either un-assign themselves from the offering or go back.
+
+Contract 60: Enter Action to Un-Assign from Lesson or Go Back
+
+    Operation: enterActionForLesson(action: String)
+    Cross References: Use Case - View or Edit Offerings
+    Pre-conditions:
+        The lesson details for the selected offering have been displayed to the instructor.
+        The system has prompted the instructor to type 'u' to un-assign themselves from the offering or 'b' to go back.
+    Post-conditions:
+        If the instructor types 'u', the lesson is updated to reflect that it is no longer assigned to the instructor, and a success message is displayed.
+        If the instructor types 'b', the system returns to the list of all offerings.
+        If the input is invalid, an error message is displayed, and the instructor is prompted to enter a valid action.
+
+Contract 61: Un-Assign Lesson from Instructor
+
+    Operation: unassignLesson(lessonId: Integer)
+    Cross References: Use Case - View or Edit Offerings
+    Pre-conditions:
+        The instructor has chosen to un-assign themselves from the lesson by typing 'u'.
+    Post-conditions:
+        The lesson's assigned instructor ID is set to -1, and the lesson becomes available for reassignment.
+        The instructor's details are updated in the system.
+        If the un-assignment is successful, a success message is displayed.
+        If the un-assignment fails, an error message is displayed.
+
+Contract 62: Enter View Offerings Command ID
+
+    Operation: enterViewOfferingsCommandId()
+    Cross References: Use Case - View Offerings
+    Pre-conditions:
+        The user is logged into the system.
+        The list of possible commands is displayed to the user.
+        The request to enter the command ID is displayed.
+    Post-conditions:
+        The system retrieves all available lessons.
+        If no lessons are available, a message is displayed indicating that there are no lessons available.
+        If lessons exist, they are displayed in a tabular format, showing relevant lesson information.
+
+Contract 63: Display Lesson Details for All Offerings
+
+    Operation: displayLessonDetails(lessonId: Integer, locationId: Integer)
+    Cross References: Use Case - View Offerings
+    Pre-conditions:
+        A list of available lessons has been retrieved and displayed.
+        The system has successfully retrieved details for each lesson, including location information.
+    Post-conditions:
+        Detailed information about each lesson, including its title, type, location, availability, start and end times, and schedule, is displayed.
+        If the location information for a lesson cannot be retrieved, "Unknown" is displayed for the location.

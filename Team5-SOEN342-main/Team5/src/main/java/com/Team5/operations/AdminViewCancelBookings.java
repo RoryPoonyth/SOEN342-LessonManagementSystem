@@ -5,9 +5,9 @@ import com.Team5.collections.ChildCollection;
 import com.Team5.collections.InstructorCollection;
 import com.Team5.collections.LessonCollection;
 import com.Team5.collections.LocationCollection;
+import com.Team5.models.Administrator;
 import com.Team5.models.Booking;
 import com.Team5.models.Child;
-import com.Team5.models.Client;
 import com.Team5.models.Instructor;
 import com.Team5.models.Lesson;
 import com.Team5.models.Location;
@@ -18,29 +18,30 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
-public class ViewEditBookings implements Operation {
-    private final Client client;
+public class AdminViewCancelBookings implements Operation {
+    @SuppressWarnings("unused")
+	private final Administrator admin;
     private final Scanner scanner;
 
-    public ViewEditBookings(Client client, Scanner scanner) {
-        this.client = client;
+    public AdminViewCancelBookings(Administrator admin, Scanner scanner) {
+        this.admin = admin;
         this.scanner = scanner;
     }
 
     @Override
     public void execute() {
         while (true) {
-            List<Booking> clientBookings = BookingCollection.getByClientId(client.getId());
+            List<Booking> allBookings = BookingCollection.getBookings();
 
-            if (clientBookings.isEmpty()) {
-                System.out.println("You have no bookings.");
+            if (allBookings.isEmpty()) {
+                System.out.println("No bookings available.");
                 return;
             }
 
-            Console.printTable(clientBookings, Arrays.asList("Id", "Client Id", "Lesson Id", "Child Id"));
+            Console.printTable(allBookings, Arrays.asList("Id", "Client Id", "Lesson Id", "Child Id"));
 
             System.out.print("Enter the ID of a booking to view details or type -1 to exit: ");
-            int bookingId = requestBookingId(clientBookings);
+            int bookingId = requestBookingId(allBookings);
             if (bookingId == -1) {
                 break;
             }
@@ -85,14 +86,14 @@ public class ViewEditBookings implements Operation {
         System.out.println();
     }
 
-    private int requestBookingId(List<Booking> clientBookings) {
+    private int requestBookingId(List<Booking> allBookings) {
         while (true) {
             try {
                 int bookingId = scanner.nextInt();
                 if (bookingId == -1) {
                     return -1;
                 }
-                for (Booking booking : clientBookings) {
+                for (Booking booking : allBookings) {
                     if (booking.getId() == bookingId) {
                         return bookingId;
                     }

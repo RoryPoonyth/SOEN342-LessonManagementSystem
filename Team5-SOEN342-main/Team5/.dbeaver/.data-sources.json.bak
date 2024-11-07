@@ -14,6 +14,20 @@
 				"closeIdleConnection": true,
 				"auth-model": "native"
 			}
+		},
+		"sqlite_jdbc-19305420bfc-35a7bf4536bea516": {
+			"provider": "sqlite",
+			"driver": "sqlite_jdbc",
+			"name": "Team5.db 2",
+			"save-password": true,
+			"configuration": {
+				"database": "C:\\Users\\Rory\\CODESPACE\\SOEN 342 Project\\Team5-SOEN342-main\\Team5\\Team5.db",
+				"url": "jdbc:sqlite:C:\\Users\\Rory\\CODESPACE\\SOEN 342 Project\\Team5-SOEN342-main\\Team5\\Team5.db",
+				"configurationType": "MANUAL",
+				"type": "dev",
+				"closeIdleConnection": true,
+				"auth-model": "native"
+			}
 		}
 	},
 	"connection-types": {

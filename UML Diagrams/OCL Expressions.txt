@@ -1,0 +1,139 @@
+OCL Expressions:
+
+
+1. Offerings Are Unique
+
+Requirement: "Multiple offerings on the same day and time slot must be offered at different locations."
+context LessonCollection
+inv UniqueOffering:
+    Lesson.allInstances()->forAll(l1, l2 |
+        l1 <> l2 implies
+        (l1.schedule->intersection(l2.schedule)->isEmpty() or
+         l1.startTime <> l2.startTime or
+         l1.endTime <> l2.endTime or
+         l1.locationId <> l2.locationId)
+    )
+
+2. Underage Clients Must Be Accompanied by an Adult Guardian
+
+Requirement: "Any client who is underage must necessarily be accompanied by an adult who acts as their guardian."
+context Child
+inv UnderageAccompanied:
+    self.dateOfBirth.isBefore(LocalDate.now().minusYears(18)) or self.parentId <> null
+
+3. City Associated with an Offering Must Match Instructor's Availability
+
+Requirement: "The city associated with an offering must be one of the cities that the instructor has indicated in their availabilities."
+context Lesson
+inv InstructorCityAvailability:
+    let instructor = InstructorCollection.getById(self.assignedInstructorId) in
+    instructor <> null implies instructor.availableCities->includes(LocationCollection.getById(self.locationId).city)
+
+4. Client Does Not Have Multiple Bookings on the Same Day and Time Slot
+
+Requirement: "A client does not have multiple bookings on the same day and time slot."
+context BookingCollection
+inv UniqueClientBooking:
+    Booking.allInstances()->forAll(b1, b2 |
+        b1 <> b2 implies
+        (b1.clientId <> b2.clientId or
+         LessonCollection.getById(b1.lessonId).schedule->intersection(LessonCollection.getById(b2.lessonId).schedule)->isEmpty() or
+         LessonCollection.getById(b1.lessonId).startTime <> LessonCollection.getById(b2.lessonId).startTime)
+    )
+
+
+
+context Client
+-- Ensure the email follows a proper format
+inv [ValidEmail] : email.matches('^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$')
+
+-- Password must be at least 6 characters long
+inv [PasswordLength] : password.size() >= 6
+
+-- Client can have a list of children that must be less than or equal to 10
+inv [MaxChildren] : children->size() <= 10
+
+-- A client must have a role of type UserType
+inv [ValidRole] : role = UserType::CLIENT
+
+
+
+context Instructor
+-- Ensure the email follows a proper format
+inv [ValidEmail] : email.matches('^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$')
+
+-- Password must be at least 6 characters long
+inv [PasswordLength] : password.size() >= 6
+
+-- An instructor must have a role of type UserType
+inv [ValidRole] : role = UserType::INSTRUCTOR
+
+-- An instructor can teach multiple lessons
+inv [MaxLessons] : lessons->forAll(l | l.assignedInstructorId = self.id)
+
+
+
+context Child
+-- Ensure the child's age is below 18 years
+inv [ValidAge] : dateOfBirth <= today() and dateOfBirth > today() - 18 * 365
+
+-- A child must be linked to a parent client
+inv [ValidParent] : Client.allInstances()->exists(c | c.id = parentId)
+
+
+
+context Booking
+-- A lesson can only have one booking
+inv [UniqueBooking] : Booking.allInstances()->select(b | b.lessonId = self.lessonId)->size() <= 1
+
+-- A booking must have a valid client ID
+inv [ValidClientId] : Client.allInstances()->exists(c | c.id = clientId)
+
+-- A booking must have a valid lesson ID
+inv [ValidLessonId] : Lesson.allInstances()->exists(l | l.id = lessonId)
+
+-- A booking involving a child must have a valid child ID
+inv [ValidChildId] : childId = null or Child.allInstances()->exists(ch | ch.id = childId)
+
+
+
+context Lesson
+-- Ensure that the lesson start time is before the end time
+inv [ValidTimeRange] : startTime < endTime
+
+-- If the lesson is not available, it must have an assigned instructor
+inv [AssignedInstructor] : isAvailable = false implies assignedInstructorId <> -1
+
+-- A lesson must have a valid location
+inv [ValidLocation] : Location.allInstances()->exists(loc | loc.id = locationId)
+
+-- The assigned instructor must exist in the Instructor collection if assigned
+inv [ValidInstructor] : assignedInstructorId = -1 or Instructor.allInstances()->exists(inst | inst.id = assignedInstructorId)
+
+
+
+context Location
+-- Ensure the postal code is valid
+inv [ValidPostalCode] : postalCode.matches('^[A-Z0-9 ]+$')
+
+-- Location name cannot be empty
+inv [NonEmptyName] : name.size() > 0
+
+-- A location must contain at least one lesson
+inv [HasLessons] : Lesson.allInstances()->exists(les | les.locationId = self.id)
+
+
+
+context Administrator
+-- Ensure the email follows a proper format
+inv [ValidEmail] : email.matches('^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$')
+
+-- Password must be at least 6 characters long
+inv [PasswordLength] : password.size() >= 6
+
+-- Administrator must have the role of ADMINISTRATOR
+inv [ValidRole] : role = UserType::ADMINISTRATOR
+
+
+
+

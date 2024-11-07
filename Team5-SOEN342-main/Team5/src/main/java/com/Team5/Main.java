@@ -14,6 +14,7 @@ import com.Team5.models.Instructor;
 import com.Team5.op_handlers.Command;
 import com.Team5.op_handlers.Registration;
 import com.Team5.operations.Operation;
+import com.Team5.operations.ViewOfferings;
 import com.Team5.core.Console;
 import com.Team5.core.DatabaseManager;
 
@@ -45,7 +46,8 @@ public class Main {
             System.out.println("\nPlease choose an option:");
             System.out.println("1. Log in to your account");
             System.out.println("2. Register a new account");
-            System.out.println("3. Exit the application");
+            System.out.println("3. Continue as Guest (View Offerings Only)"); // New option for Guest access
+            System.out.println("4. Exit the application");
 
             System.out.print("Enter the number of your choice: ");
             String input = scanner.nextLine();
@@ -65,15 +67,18 @@ public class Main {
             } else if (option == 2) {
                 runCommandLoop(Registration.getRegistrationCommands(scanner), scanner);
             } else if (option == 3) {
+                guestAccess(scanner);
+            } else if (option == 4) {
                 System.out.println("\nThank you for using our system. Have a wonderful day!");
                 System.exit(0);
             } else {
-                System.out.println("\nInvalid selection. Please enter a number between 1 and 3.");
+                System.out.println("\nInvalid selection. Please enter a number between 1 and 4.");
             }
         }
 
         scanner.close();
     }
+
 
     private static void logIn(Scanner scanner) {
         System.out.println("\nPlease select your user type:");
@@ -142,6 +147,17 @@ public class Main {
             System.out.println("\nYou have successfully logged out. Have a great day!");
         }
     }
+    
+    private static void guestAccess(Scanner scanner) {
+        System.out.println("\nWelcome, Guest! You can view the offerings below:");
+
+        ViewOfferings viewOfferings = new ViewOfferings();
+        viewOfferings.execute();
+
+        System.out.println("\nPress Enter to return to the main menu...");
+        scanner.nextLine();
+    }
+
 
     private static void runCommandLoop(Map<String, Operation> commandsMap, Scanner scanner) {
         List<String> commandNames = new ArrayList<>(commandsMap.keySet());

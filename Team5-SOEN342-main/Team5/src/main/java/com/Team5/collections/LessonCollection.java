@@ -12,10 +12,10 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class LessonCollection {
-    private static final String UPDATE_LESSON_SQL = "UPDATE lesson SET title = ?, type = ?, locationId = ?, startTime = ?, endTime = ?, assignedInstructorId = ? WHERE id = ?";
+    private static final String UPDATE_LESSON_SQL = "UPDATE lesson SET title = ?, type = ?, locationId = ?, startTime = ?, endTime = ?, assignedInstructorId = ?, isAvailable = ? WHERE id = ?";
     private static final String DELETE_SCHEDULE_SQL = "DELETE FROM lesson_schedule WHERE lessonId = ?";
     private static final String INSERT_SCHEDULE_SQL = "INSERT INTO lesson_schedule (lessonId, dayOfWeek) VALUES (?, ?)";
-    private static final String INSERT_LESSON_SQL = "INSERT INTO lesson (title, type, locationId, startTime, endTime) VALUES (?, ?, ?, ?, ?)";
+    private static final String INSERT_LESSON_SQL = "INSERT INTO lesson (title, type, locationId, assignedInstructorId, isAvailable, startTime, endTime) VALUES (?, ?, ?, ?, ?, ?, ?)";
     private static final String SELECT_ALL_LESSONS_SQL = "SELECT * FROM lesson";
     private static final String SELECT_LESSON_BY_ID_SQL = "SELECT * FROM lesson WHERE id = ?";
     private static final String SELECT_LESSONS_BY_INSTRUCTOR_ID_SQL = "SELECT * FROM lesson WHERE assignedInstructorId = ?";
@@ -102,8 +102,10 @@ public class LessonCollection {
             lessonStatement.setString(1, lesson.getTitle());
             lessonStatement.setString(2, lesson.getType().name());
             lessonStatement.setInt(3, lesson.getLocationId());
-            lessonStatement.setString(4, lesson.getStartTime().toString());
-            lessonStatement.setString(5, lesson.getEndTime().toString());
+            lessonStatement.setInt(4, lesson.getAssignedInstructorId());
+            lessonStatement.setBoolean(5, lesson.getIsAvailable());
+            lessonStatement.setString(6, lesson.getStartTime().toString());
+            lessonStatement.setString(7, lesson.getEndTime().toString());
 
             int rowsInserted = lessonStatement.executeUpdate();
             if (rowsInserted > 0) {
@@ -196,7 +198,10 @@ public class LessonCollection {
                     int existingStartMinutes = Backend.convertTimeToMinutes(existingLesson.getStartTime().toString());
                     int existingEndMinutes = Backend.convertTimeToMinutes(existingLesson.getEndTime().toString());
 
-                    if (startMinutes < existingEndMinutes && endMinutes > existingStartMinutes) {
+                    boolean isOverlapping = (startMinutes < existingEndMinutes && endMinutes > existingStartMinutes);
+
+                    if (isOverlapping) {
+                        System.out.printf("Conflict detected with existing lesson (ID: %d) at location %d on overlapping days.%n", existingLesson.getId(), locationId);
                         return false;
                     }
                 }
@@ -213,6 +218,8 @@ public class LessonCollection {
             Set<DayOfWeek> dayOfWeeks = Backend.parseSchedule(schedule);
 
             Lesson lesson = new Lesson(lessonType, title, locationId, start, end, dayOfWeeks);
+            lesson.setAssignedInstructorId(-1);
+            
             return add(lesson);
         } catch (Exception e) {
             System.out.println("Error creating lesson: " + e.getMessage());
@@ -257,7 +264,8 @@ public class LessonCollection {
             lessonStatement.setString(4, lesson.getStartTime().toString());
             lessonStatement.setString(5, lesson.getEndTime().toString());
             lessonStatement.setInt(6, lesson.getAssignedInstructorId());
-            lessonStatement.setInt(7, lesson.getId());
+            lessonStatement.setBoolean(7, lesson.getIsAvailable());
+            lessonStatement.setInt(8, lesson.getId());
 
             int rowsUpdated = lessonStatement.executeUpdate();
 

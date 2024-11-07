@@ -2,17 +2,17 @@ INSERT OR IGNORE INTO administrator (firstName, lastName, email, password) VALUE
 ('Admin', 'Admin', 'admin@gmail.com', 'password123');
 
 INSERT OR IGNORE INTO client (firstName, lastName, email, password, role) VALUES
-('Michael', 'Taylor', 'michael.taylor@example.com', 'michael123', 'CLIENT'),
-('Emma', 'Williams', 'emma.williams@example.com', 'emma123', 'CLIENT'),
-('Olivia', 'Martinez', 'olivia.martinez@example.com', 'olivia123', 'CLIENT'),
-('Liam', 'Johnson', 'liam.johnson@example.com', 'liam123', 'CLIENT'),
-('Ava', 'Brown', 'ava.brown@example.com', 'ava123', 'CLIENT');
+('Michael', 'Taylor', 'michael.taylor@gmail.com', 'michael123', 'CLIENT'),
+('Emma', 'Williams', 'emma.williams@gmail.com', 'emma123', 'CLIENT'),
+('Olivia', 'Martinez', 'olivia.martinez@gmail.com', 'olivia123', 'CLIENT'),
+('Liam', 'Johnson', 'liam.johnson@gmail.com', 'liam123', 'CLIENT'),
+('Ava', 'Brown', 'ava.brown@gmail.com', 'ava123', 'CLIENT');
 
 INSERT OR IGNORE INTO instructor (firstName, lastName, email, password, role) VALUES
-('James', 'Wilson', 'james.wilson@example.com', 'james123', 'INSTRUCTOR'),
-('Sophia', 'Garcia', 'sophia.garcia@example.com', 'sophia123', 'INSTRUCTOR'),
-('Ethan', 'Davis', 'ethan.davis@example.com', 'ethan123', 'INSTRUCTOR'),
-('Isabella', 'Anderson', 'isabella.anderson@example.com', 'isabella123', 'INSTRUCTOR');
+('James', 'Wilson', 'james.wilson@gmail.com', 'james123', 'INSTRUCTOR'),
+('Sophia', 'Garcia', 'sophia.garcia@gmail.com', 'sophia123', 'INSTRUCTOR'),
+('Ethan', 'Davis', 'ethan.davis@gmail.com', 'ethan123', 'INSTRUCTOR'),
+('Isabella', 'Anderson', 'isabella.anderson@gmail.com', 'isabella123', 'INSTRUCTOR');
 
 INSERT OR IGNORE INTO location (name, address, city, province, postalCode) VALUES
 ('Downtown Gym', '789 Oak St', 'Montreal', 'QC', 'H2Z1A3'),
@@ -32,7 +32,10 @@ INSERT OR IGNORE INTO lesson (type, title, locationId, assignedInstructorId, isA
 ('PRIVATE', 'Advanced Cycling Techniques', 4, 3, TRUE, '10:30:00', '11:30:00'),
 ('PRIVATE', 'Football Skills Development', 1, 1, TRUE, '12:00:00', '13:00:00'),
 ('GROUP', 'Intermediate Swimming', 3, 4, TRUE, '14:00:00', '15:00:00'),
-('PRIVATE', 'Cycling Endurance Training', 4, 4, TRUE, '15:30:00', '16:30:00');
+('PRIVATE', 'Cycling Endurance Training', 4, 4, TRUE, '15:30:00', '16:30:00'),
+('GROUP', 'Yoga Basics', 1, -1, FALSE, '08:00:00', '09:00:00'),  -- Unassigned
+('PRIVATE', 'Boxing Fundamentals', 2, -1, FALSE, '11:00:00', '12:00:00'),  -- Unassigned
+('GROUP', 'Pilates for Beginners', 4, -1, FALSE, '17:00:00', '18:00:00');  -- Unassigned
 
 INSERT OR IGNORE INTO lesson_schedule (lessonId, dayOfWeek) VALUES
 (1, 'MONDAY'),
@@ -40,7 +43,10 @@ INSERT OR IGNORE INTO lesson_schedule (lessonId, dayOfWeek) VALUES
 (2, 'TUESDAY'),
 (3, 'THURSDAY'),
 (4, 'FRIDAY'),
-(5, 'SATURDAY');
+(5, 'SATURDAY'),
+(6, 'SUNDAY'),  -- Yoga Basics
+(7, 'TUESDAY'),  -- Boxing Fundamentals
+(8, 'FRIDAY');   -- Pilates for Beginners
 
 INSERT OR IGNORE INTO client_children (clientId, childId) VALUES
 (1, 1),

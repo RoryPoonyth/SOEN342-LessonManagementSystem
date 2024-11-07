@@ -46,6 +46,9 @@ public class AcceptOffering implements Operation {
         if (selectedLesson.getAssignedInstructorId() == -1) {
             selectedLesson.setAssignedInstructorId(instructor.getId());
             selectedLesson.setAvailable(true);
+
+            LessonCollection.updateLesson(selectedLesson);
+
             System.out.println("Lesson successfully assigned to you!");
         } else {
             System.out.println("Lesson is already assigned to another instructor.");

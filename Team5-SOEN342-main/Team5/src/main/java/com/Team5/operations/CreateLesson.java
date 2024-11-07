@@ -119,7 +119,7 @@ public class CreateLesson implements Operation {
     private String requestScheduleInput() {
         String[] validDays = { "M", "Tu", "W", "Th", "F", "Sa", "Su" };
         while (true) {
-            System.out.println("Please enter the schedule (M, Tu, W, Th, F, Sa, Su): ");
+            System.out.println("Please enter the schedule (M, Tu, W, Th, F, Sa, Su) with [-] for multiple: ");
             String schedule = scanner.nextLine().trim();
             String[] days = schedule.split("-");
 

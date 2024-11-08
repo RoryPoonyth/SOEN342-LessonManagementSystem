@@ -58,7 +58,7 @@
           <configuration>
                 <archive>
                     <manifest>
-                        <mainClass>com.alouer.Terminal</mainClass>
+                        <mainClass>com.Team5.Main</mainClass>
                     </manifest>
                 </archive>
             </configuration>

@@ -63,7 +63,9 @@ The application can be run in a console environment, allowing users to interacti
 
 ## Demo Video
 
-[Placeholder for Demo Video: A 5-minute demonstration video will be added here to showcase the main features and functionality of the project.]
+[![Demo Video](https://img.youtube.com/vi/VIDEO_ID/0.jpg)](https://www.youtube.com/watch?v=VIDEO_ID)
+
+*Note: Replace `VIDEO_ID` with the actual YouTube video ID once the demo video is uploaded.*
 
 ## Contribution Guidelines
 

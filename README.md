@@ -26,6 +26,7 @@ This project was created as part of the SOEN-342 course requirements for Softwar
 ## Technologies Used
 
 - **Java**: Primary programming language for implementing the backend operations.
+- **SQLite**: Used as the database for storing user, lesson, booking, and location information.
 - **Scanner**: Used for user input handling in a console-based interface.
 - **Collections**: Java collections such as `List` for managing users, bookings, lessons, and locations.
 

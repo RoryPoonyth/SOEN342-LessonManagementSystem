@@ -63,7 +63,7 @@ The application can be run in a console environment, allowing users to interacti
 
 ## Demo Video
 
-[![Demo Video](https://img.youtube.com/vi/qav7BYgqjI)/0.jpg)](https://www.youtube.com/watch?v=qav7BYgqjI))
+[![Demo Video](https://img.youtube.com/vi/-qav7BYgqjI/0.jpg)](https://www.youtube.com/watch?v=-qav7BYgqjI)
 
 *Note: Replace `VIDEO_ID` with the actual YouTube video ID once the demo video is uploaded.*
 
